@@ -8,3 +8,5 @@ function brent.install(package)
   end
   shell.execute("wget https://raw.githubusercontent.com/Asteroid/OpenComputersPackages/refs/heads/main/" .. package .. ".lua /libs/" .. package .. ".lua")
 end
+
+return brent
