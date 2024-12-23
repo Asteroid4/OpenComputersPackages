@@ -5,7 +5,7 @@ local internet = require("internet")
 local brent = {}
 
 function brent.list()
-  result = ""
+  local result = ""
   for chunk in internet.request("https://raw.githubusercontent.com/Asteroid4/OpenComputersPackages/refs/heads/main/list")
   do result = result..chunk end
   print(result)
