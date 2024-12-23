@@ -7,7 +7,7 @@ function brent.install(package)
     filesystem.remove("/lib/" .. package .. ".lua")
   end
   shell.execute("wget https://raw.githubusercontent.com/Asteroid4/OpenComputersPackages/refs/heads/main/" .. package .. ".lua /lib/" .. package .. ".lua")
-  print("Installed " .. package .. "successfully!")
+  print("Installed " .. package .. " successfully!")
   io.write("Reboot? (Y/n) ")
   if io.read() == "Y" then
     computer.shutdown(true)
