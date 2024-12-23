@@ -1,5 +1,6 @@
 local shell = require("shell")
 local filesystem = require("filesystem")
+local computer = require("computer")
 local brent = {}
 
 function brent.install(package)
