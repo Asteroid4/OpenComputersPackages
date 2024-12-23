@@ -6,7 +6,8 @@ local brent = {}
 
 function brent.list()
   for chunk in internet.request("https://raw.githubusercontent.com/Asteroid4/OpenComputersPackages/refs/heads/main/list")
-  do print(chunk) end
+  do result = result..chunk end
+  print(result)
 end
 
 function brent.install(package)
