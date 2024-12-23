@@ -5,7 +5,8 @@ local internet = require("internet")
 local brent = {}
 
 function brent.list()
-  print(internet.request("https://raw.githubusercontent.com/Asteroid4/OpenComputersPackages/refs/heads/main/list"))
+  for chunk in internet.request("https://raw.githubusercontent.com/Asteroid4/OpenComputersPackages/refs/heads/main/list")
+  do print(chunk) end
 end
 
 function brent.install(package)
