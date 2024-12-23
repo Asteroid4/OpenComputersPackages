@@ -5,32 +5,37 @@ local internet = require("internet")
 local brent = {}
 
 function brent.list()
+  result = ""
   for chunk in internet.request("https://raw.githubusercontent.com/Asteroid4/OpenComputersPackages/refs/heads/main/list")
   do result = result..chunk end
   print(result)
 end
 
-function brent.install(package)
+function brent.install(package, prompt)
   if filesystem.exists("/lib/" .. package .. ".lua") then
     filesystem.remove("/lib/" .. package .. ".lua")
     print("That package is already installed!")
   else
     shell.execute("wget https://raw.githubusercontent.com/Asteroid4/OpenComputersPackages/refs/heads/main/" .. package .. ".lua /lib/" .. package .. ".lua")
     print("Installed " .. package .. " successfully!")
-    io.write("Reboot? (Y/n) ")
-    if io.read() == "Y" then
-      computer.shutdown(true)
+    if prompt then
+      io.write("Reboot? (Y/n) ")
+      if io.read() == "Y" then
+        computer.shutdown(true)
+      end
     end
   end
 end
 
-function brent.uninstall(package)
+function brent.uninstall(package, prompt)
   if filesystem.exists("/lib/" .. package .. ".lua") then
     filesystem.remove("/lib/" .. package .. ".lua")
     print("Uninstalled " .. package .. " successfully!")
-    io.write("Reboot? (Y/n) ")
-    if io.read() == "Y" then
-      computer.shutdown(true)
+    if prompt then
+      io.write("Reboot? (Y/n) ")
+      if io.read() == "Y" then
+        computer.shutdown(true)
+      end
     end
   else
     print("That package is not installed!")
@@ -38,17 +43,8 @@ function brent.uninstall(package)
 end
 
 function brent.update(package)
-  if filesystem.exists("/lib/" .. package .. ".lua") then
-    filesystem.remove("/lib/" .. package .. ".lua")
-    shell.execute("wget https://raw.githubusercontent.com/Asteroid4/OpenComputersPackages/refs/heads/main/" .. package .. ".lua /lib/" .. package .. ".lua")
-    print("Updated " .. package .. " successfully!")
-    io.write("Reboot? (Y/n) ")
-    if io.read() == "Y" then
-      computer.shutdown(true)
-    end
-  else
-    print("That package is not installed!")
-  end
+  brent.uninstall(package, false)
+  brent.install(package)
 end
 
 return brent
