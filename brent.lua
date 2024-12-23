@@ -11,14 +11,14 @@ function brent.list()
   print(result)
 end
 
-function brent.install(package, prompt)
+function brent.install(package, noprompt)
   if filesystem.exists("/lib/" .. package .. ".lua") then
     filesystem.remove("/lib/" .. package .. ".lua")
     print("That package is already installed!")
   else
     shell.execute("wget https://raw.githubusercontent.com/Asteroid4/OpenComputersPackages/refs/heads/main/" .. package .. ".lua /lib/" .. package .. ".lua")
     print("Installed " .. package .. " successfully!")
-    if prompt then
+    if not noprompt then
       io.write("Reboot? (Y/n) ")
       if io.read() == "Y" then
         computer.shutdown(true)
@@ -27,11 +27,11 @@ function brent.install(package, prompt)
   end
 end
 
-function brent.uninstall(package, prompt)
+function brent.uninstall(package, noprompt)
   if filesystem.exists("/lib/" .. package .. ".lua") then
     filesystem.remove("/lib/" .. package .. ".lua")
     print("Uninstalled " .. package .. " successfully!")
-    if prompt then
+    if not noprompt then
       io.write("Reboot? (Y/n) ")
       if io.read() == "Y" then
         computer.shutdown(true)
@@ -42,9 +42,9 @@ function brent.uninstall(package, prompt)
   end
 end
 
-function brent.update(package)
-  brent.uninstall(package)
-  brent.install(package)
+function brent.update(package, noprompt)
+  brent.uninstall(package, true)
+  brent.install(package, noprompt)
 end
 
 return brent
