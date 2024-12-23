@@ -43,7 +43,7 @@ function brent.uninstall(package, prompt)
 end
 
 function brent.update(package)
-  brent.uninstall(package, false)
+  brent.uninstall(package)
   brent.install(package)
 end
 
