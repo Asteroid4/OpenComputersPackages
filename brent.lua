@@ -1,7 +1,12 @@
 local shell = require("shell")
 local filesystem = require("filesystem")
 local computer = require("computer")
+local internet = require("internet")
 local brent = {}
+
+function brent.list()
+  print(internet.request("https://raw.githubusercontent.com/Asteroid4/OpenComputersPackages/refs/heads/main/list"))
+end
 
 function brent.install(package)
   if filesystem.exists("/lib/" .. package .. ".lua") then
