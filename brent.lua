@@ -42,9 +42,7 @@ function help()
   brent update <package>]])
 end
 
-if options.h then
-  help()
-elseif args[0] == "list" then
+if args[0] == "list" then
   result = ""
   for chunk in internet.request("https://raw.githubusercontent.com/Asteroid4/OpenComputersPackages/refs/heads/main/list")
   do result = result..chunk end
