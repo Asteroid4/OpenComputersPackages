@@ -2,9 +2,16 @@ local shell = require("shell")
 local filesystem = require("filesystem")
 local computer = require("computer")
 local internet = require("internet")
-local args, options = shell.parse(...)
+local brent = {}
 
-function install(package, noprompt)
+function brent.list()
+  result = ""
+  for chunk in internet.request("https://raw.githubusercontent.com/Asteroid4/OpenComputersPackages/refs/heads/main/list")
+  do result = result..chunk end
+  print(result)
+end
+
+function brent.install(package, noprompt)
   if filesystem.exists("/lib/" .. package .. ".lua") then
     print("That package is already installed!")
   else
@@ -19,7 +26,7 @@ function install(package, noprompt)
   end
 end
 
-function uninstall(package, noprompt)
+function brent.uninstall(package, noprompt)
   if filesystem.exists("/lib/" .. package .. ".lua") then
     filesystem.remove("/lib/" .. package .. ".lua")
     print("Uninstalled " .. package .. " successfully!")
@@ -34,27 +41,9 @@ function uninstall(package, noprompt)
   end
 end
 
-function help()
-  print([[Usage:
-  brent list
-  brent install <package>
-  brent uninstall <package>
-  brent update <package>]])
+function brent.update(package, noprompt)
+  brent.uninstall(package, true)
+  brent.install(package, noprompt)
 end
-for element in args do print(element) end
-for element2 in options do print(element2) end
-if args[0] == "list" then
-  result = ""
-  for chunk in internet.request("https://raw.githubusercontent.com/Asteroid4/OpenComputersPackages/refs/heads/main/list")
-  do result = result..chunk end
-  print(result)
-elseif args[0] == "install" then
-  install(args[1], false)
-elseif args[0] == "uninstall" then
-  uninstall(args[1], false)
-elseif args[0] == "update" then
-  brent.uninstall(args[1], true)
-  brent.install(args[1], false)
-else
-  help()
-end
+
+return brent
