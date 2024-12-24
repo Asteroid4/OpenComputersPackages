@@ -41,19 +41,20 @@ function help()
   brent uninstall <package>
   brent update <package>]])
 end
-
+print(args)
+print(options)
 if args[0] == "list" then
   result = ""
   for chunk in internet.request("https://raw.githubusercontent.com/Asteroid4/OpenComputersPackages/refs/heads/main/list")
   do result = result..chunk end
   print(result)
 elseif args[0] == "install" then
-  install(false)
+  install(args[1], false)
 elseif args[0] == "uninstall" then
-  uninstall(false)
+  uninstall(args[1], false)
 elseif args[0] == "update" then
-  brent.uninstall(package, true)
-  brent.install(package, false)
+  brent.uninstall(args[1], true)
+  brent.install(args[1], false)
 else
   help()
 end
