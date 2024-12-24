@@ -41,8 +41,8 @@ function help()
   brent uninstall <package>
   brent update <package>]])
 end
-print(args)
-print(options)
+for element in args do print(element) end
+for element2 in options do print(element2) end
 if args[0] == "list" then
   result = ""
   for chunk in internet.request("https://raw.githubusercontent.com/Asteroid4/OpenComputersPackages/refs/heads/main/list")
