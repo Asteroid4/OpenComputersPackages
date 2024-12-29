@@ -16,8 +16,13 @@ function alarm.arm()
     component.modem.open(5042)
     while (true) do
         local _, _, _, _, _, on = event.pull("modem_message")
-        if (on) then component.redstone.setOutput(sides.top, 15)
-        else component.redstone.setOutput(sides.top, 0) end
+        if (on) then
+            component.redstone.setOutput(sides.top, 15)
+            print(os.time() .. ": Alarm activated!")
+        else
+            component.redstone.setOutput(sides.top, 0)
+            print(os.time() .. ": Alarm deactivated!")
+        end
     end
 end
 
