@@ -6,18 +6,19 @@ local alarm = {}
 
 function activate()
     component.redstone.setOutput(sides.top, 15)
-    os.sleep(alarmTime)
+end
+
+function deactivate()
     component.redstone.setOutput(sides.top, 0)
 end
 
-function alarm.arm(alarmTime)
+function alarm.arm()
     component.modem.open(5042)
-    event.listen("modem_message", activate)
-end
-
-function alarm.disarm()
-    component.modem.close(5042)
-    event.ignore("modem_message", activate)
+    while (true) do
+        local _, _, _, _, _, on = event.pull("modem_message")
+        if (on) then component.redstone.setOutput(sides.top, 15)
+        else component.redstone.setOutput(sides.top, 0) end
+    end
 end
 
 return alarm
