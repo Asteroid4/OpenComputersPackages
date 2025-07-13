@@ -1,5 +1,5 @@
-config-path = "/usr/etc/jconftest.cfg"
-default-config-path = "/usr/etc/jconftest.cfg.d"
+config-path = "/etc/jconftest.cfg"
+default-config-path = "/etc/jconftest.cfg.d"
 io.write("Searching for config file...")
 if filesystem.exists(config-path) then
   io.write("Config exists, test complete!")
