@@ -5,10 +5,28 @@ local redstone
 local config_path = "/etc/jpower.cfg"
 local default_config_path = "/etc/jpower.cfg.d"
 
-if component
+if component.isAvailable("redstone") then
+  redstone = component.redstone
+else
+  io.stderr:write("A tier 2 redstone card is required.")
+  os.exit()
+end
 
 function main(config)
-  io.write(string.format("foo is %d and bar is %d", config.foo, config.bar))
+  local stop_signal_side = config.stop_signal_side
+  local power_remaining_side = config.power_remaining_side
+  local generators_signal_side = config.generators_signal_side
+  local machines_signals_side = config.machines_signals_side
+
+  local done = false
+  while not done do
+    local power_remaining = redstone.getInput(power_remaining_side)
+    if redstone.getInput(stop_signal_side) > 0 then
+      done = true
+    else
+      os.sleep(1)
+    end
+  end
 end
 
 function load_config()
