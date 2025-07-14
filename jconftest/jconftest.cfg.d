@@ -1,1 +1,4 @@
-But like, imagine there was a config file here.
+{
+  foo = 42,
+  bar = 87
+}
