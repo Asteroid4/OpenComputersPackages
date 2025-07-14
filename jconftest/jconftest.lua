@@ -1,19 +1,18 @@
 local fs = require("filesystem")
 local serial = require("serialization")
 
-local config = {}
 local config_path = "/etc/jconftest.cfg"
 local default_config_path = "/etc/jconftest.cfg.d"
 
-function main()
+function main(config)
   io.write(string.format("foo is %d and bar is %d", config.foo, config.bar))
 end
 
 function load_config()
-  file = io.open(config_path)
-  config = serial.unserialize(file:read("*a"))
+  local file = io.open(config_path)
+  local config = serial.unserialize(file:read("*a"))
   io.write("Config loaded successfully!\n")
-  main()
+  main(config)
 end
 
 io.write("Searching for config file...\n")
