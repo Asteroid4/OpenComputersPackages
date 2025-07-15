@@ -15,12 +15,22 @@ end
 
 function main(config)
   while true do
-    local manual_override = redstone.getInput(config.manual_override_side) > 0
     local bundled_input = redstone.getBundledInput(config.bundled_input_side)
-    if manual_override then
+    if redstone.getInput(config.manual_override_side) > 0 then
       redstone.setBundledOutput(config.bundled_output_side, redstone.getBundledInput(config.bundled_input_side))
     else
       local power_remaining = redstone.getInput(config.power_remaining_side)
+      local bundled_output = redstone.getBundledOutput(config.bundled_output_side)
+      if bundled_output[config.generator_color] > 0 then
+        if power_remaining >= config.generator_deactivate_threshold then
+          bundled_output[config.generator_color] = 0
+        end
+      else
+        if power_remaining <= config.generator_activate_threshold then
+          bundled_output[config.generator_color] = 255
+        end
+      end
+      redstone.setBundledOutput(config.bundled_output_side, bundled_output)
     end
     os.sleep(1)
   end
