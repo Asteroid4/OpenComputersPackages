@@ -14,21 +14,28 @@ else
 end
 
 function main(config)
+  local auto_bundled_output = redstone.getBundledOutput(config.bundled_output_side)
   while true do
     local bundled_input = redstone.getBundledInput(config.bundled_input_side)
     if redstone.getInput(config.manual_override_side) > 0 then
       redstone.setBundledOutput(config.bundled_output_side, redstone.getBundledInput(config.bundled_input_side))
     else
       local power_remaining = redstone.getInput(config.power_remaining_side)
-      local auto_bundled_output = redstone.getBundledOutput(config.bundled_output_side)
-      local old_bundled_output = redstone.getBundledOutput(config.bundled_output_side)
+      redstone.setOutput(config.alarm_side, 0)
       if power_remaining >= config.generator_deactivate_threshold then
         auto_bundled_output[config.generator_color] = 0
-        redstone.setOutput(config.alarm_side, 0)
       elseif power_remaining > config.generator_active_threshold then
-        redstone.setOutput(config.alarm_side, 0)
+      else
+        auto_bundled_output[config.generator_color] = 255
+        if power_remaining <= config.low_threshold then
+          if power_remaining <= config.high_threshold then
+            redstone.setOutput(config.alarm_side, 15)
+          else
+          end
+        else
+        end
       end
-      redstone.setBundledOutput(config.bundled_output_side, new_bundled_output)
+      redstone.setBundledOutput(config.bundled_output_side, auto_bundled_output)
     end
     os.sleep(1)
   end
