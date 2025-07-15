@@ -17,6 +17,7 @@ function main(config)
     local manual_override = redstone.getInput(config.manual_override_side) > 0
     local bundled_input = redstone.getBundledInput(config.bundled_input_side)
     if manual_override then
+      io.write("manual)
       redstone.setBundledOutput(config.bundled_output_side, redstone.getBundledInput(config.bundled_input_side))
     else
       local power_remaining = redstone.getInput(config.power_remaining_side)
