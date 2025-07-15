@@ -13,19 +13,15 @@ else
 end
 
 function main(config)
-  local stop_signal_side = config.stop_signal_side
-  local power_remaining_side = config.power_remaining_side
-  local generators_signal_side = config.generators_signal_side
-  local machines_signals_side = config.machines_signals_side
-
-  local done = false
-  while not done do
-    local power_remaining = redstone.getInput(power_remaining_side)
-    if redstone.getInput(stop_signal_side) > 0 then
-      done = true
+  while true do
+    local manual_override = redstone.getInput(config.manual_override_side) > 0
+    local bundled_input = redstone.getBundledInput(config.bundled_input_side)
+    if manual_override then
+      redstone.setBundledOutput(config.bundled_output_side, redstone.getBundledInput(config.bundled_input_side))
     else
-      os.sleep(1)
+      local power_remaining = redstone.getInput(config.power_remaining_side)
     end
+    os.sleep(1)
   end
 end
 
