@@ -7,6 +7,7 @@
     generator_color = 15,
     alarm_color = 14,
 
-    generator_activate_threshold = 3,
-    generator_deactivate_threshold = 14
+    generator_activate_threshold = 4,
+    generator_deactivate_threshold = 14,
+    alarm_threshold = 2,
 }
