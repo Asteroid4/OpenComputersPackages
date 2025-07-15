@@ -12,6 +12,6 @@
     low_threshold = 2,
     high_threshold = 1,
 
-    low_machines = {0, 1, 2},
-    high_machines = {3, 4, 5}
+    low_priority_machines = {0, 1, 2},
+    high_priority_machines = {3, 4, 5}
 }
