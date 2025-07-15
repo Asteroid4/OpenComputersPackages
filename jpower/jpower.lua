@@ -14,28 +14,57 @@ else
 end
 
 function main(config)
-  local auto_bundled_output = redstone.getBundledOutput(config.bundled_output_side)
+  local generator_enabled = true
+  local low_machines_enabled = true
+  local high_machines_enabled = true
   while true do
     local bundled_input = redstone.getBundledInput(config.bundled_input_side)
     if redstone.getInput(config.manual_override_side) > 0 then
-      redstone.setBundledOutput(config.bundled_output_side, redstone.getBundledInput(config.bundled_input_side))
+      redstone.setBundledOutput(config.bundled_output_side, bundled_input)
+      redstone.setOutput(config.alarm_side, 0)
     else
       local power_remaining = redstone.getInput(config.power_remaining_side)
-      redstone.setOutput(config.alarm_side, 0)
       if power_remaining >= config.generator_deactivate_threshold then
-        auto_bundled_output[config.generator_color] = 0
+        generator_enabled = false
+        redstone.setOutput(config.alarm_side, 0)
+        low_machines_enabled = true
+        high_machines_enabled = true
       elseif power_remaining > config.generator_active_threshold then
+        redstone.setOutput(config.alarm_side, 0)
+        low_machines_enabled = true
+        high_machines_enabled = true
       else
-        auto_bundled_output[config.generator_color] = 255
+        generator_enabled = true
         if power_remaining <= config.low_threshold then
+          low_machines_enabled = false
           if power_remaining <= config.high_threshold then
             redstone.setOutput(config.alarm_side, 15)
+            high_machines_enabled = false
           else
+            redstone.setOutput(config.alarm_side, 0)
+            high_machines_enabled = true
           end
         else
+          redstone.setOutput(config.alarm_side, 0)
+          low_machines_enabled = true
+          high_machines_enabled = true
         end
       end
-      redstone.setBundledOutput(config.bundled_output_side, auto_bundled_output)
+      bundled_output = bundled_input
+      if generator_enabled then
+        bundled_output[config.generator_color] = 255
+      end
+      if low_machines_enabled then
+        for _, machine_color in ipairs(config.low_priority_machines) do
+          bundled_output[machine_color] = 255
+        end
+      end
+      if high_machines_enabled then
+        for _, machine_color in ipairs(config.high_priority_machines) do
+          bundled_output[machine_color] = 255
+        end
+      end
+      redstone.setBundledOutput(config.bundled_output_side, bundled_output)
     end
     os.sleep(1)
   end
