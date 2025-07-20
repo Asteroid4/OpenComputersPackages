@@ -21,16 +21,16 @@ function main(config)
     local bundled_input = redstone.getBundledInput(config.bundled_input_side)
     if redstone.getInput(config.manual_override_side) > 0 then
       redstone.setBundledOutput(config.bundled_output_side, bundled_input)
-      redstone.setOutput(config.alarm_side, 0)
+      redstone.setOutput(config.alarm_output_side, 0)
     else
       local power_remaining = redstone.getInput(config.power_remaining_side)
       if power_remaining >= config.generator_deactivate_threshold then
         generator_enabled = false
-        redstone.setOutput(config.alarm_side, 0)
+        redstone.setOutput(config.alarm_output_side, 0)
         low_machines_enabled = true
         high_machines_enabled = true
       elseif power_remaining > config.generator_activate_threshold then
-        redstone.setOutput(config.alarm_side, 0)
+        redstone.setOutput(config.alarm_output_side, 0)
         low_machines_enabled = true
         high_machines_enabled = true
       else
@@ -38,10 +38,10 @@ function main(config)
         if power_remaining <= config.low_threshold then
           low_machines_enabled = false
           if power_remaining <= config.high_threshold then
-            redstone.setOutput(config.alarm_side, 15)
+            redstone.setOutput(config.alarm_output_side, 15)
             high_machines_enabled = false
           else
-            redstone.setOutput(config.alarm_side, 0)
+            redstone.setOutput(config.alarm_output_side, 0)
             high_machines_enabled = true
           end
         else
