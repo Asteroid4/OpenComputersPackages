@@ -7,9 +7,9 @@ local default_config_path = "/etc/jvertest.cfg.d"
 
 function main(config)
   if version > config.version then
-    io.write(string.format("The program is using version %d, which is newer than the config file's version, &d.", version, config.version))
+    io.write(string.format("The program is using version %d, which is newer than the config file's version, %d.", version, config.version))
   elseif version < config.version then
-    io.write(string.format("The program is using version %d, which is older than the config file's version, &d.", version, config.version))
+    io.write(string.format("The program is using version %d, which is older than the config file's version, %d.", version, config.version))
   else
     io.write(string.format("The program is using version %d, which is the same as the config file's version.", version))
   end
