@@ -45,7 +45,7 @@ function main(config)
             high_machines_enabled = true
           end
         else
-          redstone.setOutput(config.alarm_side, 0)
+          redstone.setOutput(config.alarm_output_side, 0)
           low_machines_enabled = true
           high_machines_enabled = true
         end
@@ -53,6 +53,8 @@ function main(config)
       bundled_output = bundled_input
       if generator_enabled then
         bundled_output[config.generator_color] = 255
+      else
+        bundled_output[config.generator_color] = 0
       end
       if low_machines_enabled then
         for _, machine_color in ipairs(config.low_priority_machines) do
