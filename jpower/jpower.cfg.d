@@ -1,4 +1,6 @@
 {
+    version = 1,
+    
     manual_override_side = 5,
     power_remaining_side = 4,
     bundled_output_side = 2,
