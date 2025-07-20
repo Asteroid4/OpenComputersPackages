@@ -29,7 +29,7 @@ function main(config)
         redstone.setOutput(config.alarm_side, 0)
         low_machines_enabled = true
         high_machines_enabled = true
-      elseif power_remaining > config.generator_active_threshold then
+      elseif power_remaining > config.generator_activate_threshold then
         redstone.setOutput(config.alarm_side, 0)
         low_machines_enabled = true
         high_machines_enabled = true
