@@ -3,6 +3,7 @@ local serial = require("serialization")
 local component = require("component")
 local redstone
 
+local version = 1
 local config_path = "/etc/jpower.cfg"
 local default_config_path = "/etc/jpower.cfg.d"
 
@@ -14,6 +15,11 @@ else
 end
 
 function main(config)
+  if version > config.version then
+    io.write("Warning: The program is newer than the config file, which may lead to crashes or unstable behavior.")
+  elseif version < config.version then
+    io.write("Warning: The config file is newer than the program, which may lead to crashes or unstable behavior.")
+  end
   local generator_enabled = true
   local low_machines_enabled = true
   local high_machines_enabled = true
