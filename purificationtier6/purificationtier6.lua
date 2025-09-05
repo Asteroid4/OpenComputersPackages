@@ -24,7 +24,7 @@ end
 
 local function switch_lens(config, current_lens, next_lens)
   local items_transferred = transposer.transferItem(config.transposer_lens_side, config.transposer_chest_side, 1, 1, current_lens)
-  if items_transferred != 1 then
+  if items_transferred ~= 1 then
     return false
   end
   items_transferred = transposer.transferItem(config.transposer_chest_side, config.transposer_lens_side, 1, next_lens, 1)
@@ -38,8 +38,21 @@ function main(config)
     io.write(string.format("The program is using version %d, which is older than the config file's version, %d.\n", version, config.version))
   end
   local current_lens = 1
+  local last_swap_signal = 0
+  local last_restart_signal = 15
   local sane = true
   while sane do
+    if redstone.getInput(config.recipe_restart_side) == 0 and last_restart_signal ~= 0 then
+      sane = switch_lens(config, current_lens, 1)
+      current_lens = 1
+    elseif redstone.getInput(config.lens_swap_side) ~= 0 and last_swap_signal == 0 then
+      local next_lens = current_lens + 1
+      if next_lens == 10 then
+        next_lens = 1
+      end
+      sane = switch_lens(config, current_lens, next_lens)
+      current_lens = next_lens
+    end
   end
 end
 
