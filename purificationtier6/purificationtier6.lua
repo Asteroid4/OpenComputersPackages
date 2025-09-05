@@ -22,11 +22,24 @@ else
   os.exit()
 end
 
+local function switch_lens(config, current_lens, next_lens)
+  local items_transferred = transposer.transferItem(config.transposer_lens_side, config.transposer_chest_side, 1, 1, current_lens)
+  if items_transferred != 1 then
+    return false
+  end
+  items_transferred = transposer.transferItem(config.transposer_chest_side, config.transposer_lens_side, 1, next_lens, 1)
+  return items_transferred == 1
+end
+
 function main(config)
   if version > config.version then
     io.write(string.format("The program is using version %d, which is newer than the config file's version, %d.\n", version, config.version))
   elseif version < config.version then
     io.write(string.format("The program is using version %d, which is older than the config file's version, %d.\n", version, config.version))
+  end
+  local current_lens = 1
+  local sane = true
+  while sane do
   end
 end
 
