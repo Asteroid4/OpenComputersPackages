@@ -57,6 +57,7 @@ function main(config)
     end
     last_swap_signal = swap_signal
     last_restart_signal = restart_signal
+    os.sleep(0.05)
   end
   io.write("An error has occurred, exiting...")
 end
