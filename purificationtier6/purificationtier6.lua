@@ -40,19 +40,23 @@ function main(config)
   local last_restart_signal = 15
   local sane = true
   while sane do
-    if redstone.getInput(config.recipe_restart_side) == 0 and last_restart_signal ~= 0 then
+    local swap_signal = redstone.getInput(config.lens_swap_side)
+    local restart_signal = redstone.getInput(config.recipe_restart_side)
+    if restart_signal == 0 and last_restart_signal ~= 0 then
+      io.write("Restarting recipe...\n")
       sane = switch_lens(config, current_lens, 1)
       current_lens = 1
-      io.write("Restarting recipe...\n")
-    elseif redstone.getInput(config.lens_swap_side) ~= 0 and last_swap_signal == 0 then
+    elseif swap_signal ~= 0 and last_swap_signal == 0 then
       local next_lens = current_lens + 1
       if next_lens == 10 then
         next_lens = 1
       end
+      io.write("Switching to next lens...\n")
       sane = switch_lens(config, current_lens, next_lens)
       current_lens = next_lens
-      io.write("Switching to next lens...\n")
     end
+    last_swap_signal = swap_signal
+    last_restart_signal = restart_signal
   end
   io.write("An error has occurred, exiting...")
 end
