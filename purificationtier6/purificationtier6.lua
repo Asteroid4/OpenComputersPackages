@@ -23,11 +23,9 @@ else
 end
 
 local function switch_lens(config, current_lens, next_lens)
-  local items_transferred = transposer.transferItem(config.transposer_lens_side, config.transposer_chest_side, 1, 1, current_lens)
-  if items_transferred ~= 1 then
-    return false
-  end
-  items_transferred = transposer.transferItem(config.transposer_chest_side, config.transposer_lens_side, 1, next_lens, 1)
+  transposer.transferItem(config.transposer_lens_side, config.transposer_chest_side, 1, 1, current_lens)
+  local items_transferred = transposer.transferItem(config.transposer_chest_side, config.transposer_lens_side, 1, next_lens, 1)
+  io.write(string.format("Switched from lens %d to lens %d.\n", current_lens, next_lens))
   return items_transferred == 1
 end
 
@@ -45,6 +43,7 @@ function main(config)
     if redstone.getInput(config.recipe_restart_side) == 0 and last_restart_signal ~= 0 then
       sane = switch_lens(config, current_lens, 1)
       current_lens = 1
+      io.write("Restarting recipe...\n")
     elseif redstone.getInput(config.lens_swap_side) ~= 0 and last_swap_signal == 0 then
       local next_lens = current_lens + 1
       if next_lens == 10 then
@@ -52,8 +51,10 @@ function main(config)
       end
       sane = switch_lens(config, current_lens, next_lens)
       current_lens = next_lens
+      io.write("Switching to next lens...\n")
     end
   end
+  io.write("An error has occurred, exiting...")
 end
 
 function load_config()
