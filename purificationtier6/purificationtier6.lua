@@ -23,6 +23,9 @@ else
 end
 
 local function switch_lens(config, current_lens, next_lens)
+  if current_lens == next_lens then
+    return true
+  end
   transposer.transferItem(config.transposer_lens_side, config.transposer_chest_side, 1, 1, current_lens)
   local items_transferred = transposer.transferItem(config.transposer_chest_side, config.transposer_lens_side, 1, next_lens, 1)
   io.write(string.format("Switched from lens %d to lens %d.\n", current_lens, next_lens))
