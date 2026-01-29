@@ -24,22 +24,22 @@ function main(config)
     io.write("[INFO] Loaded redstone card!\n")
   end
   if component.get(config.transposer_quark_in_addr) == nil then
-    io.stderr:write(string.format("[ERROR] Unable to find quark input transposer by address of %s.\n", config.transposer_quark_in_addr))
+    io.stderr:write(string.format("[ERROR] Unable to find quark input transposer by address of %s.\n", component.get(config.transposer_quark_in_addr)))
     error = true
   else
-    io.write(string.format("[INFO] Loaded quark input transposer at address %s!\n", config.transposer_quark_in_addr))
+    io.write(string.format("[INFO] Loaded quark input transposer at address %s!\n", component.get(config.transposer_quark_in_addr)))
   end
   if component.get(config.transposer_quark_out_addr) == nil then
-    io.stderr:write(string.format("[ERROR] Unable to find quark output transposer by address of %s.\n", config.transposer_quark_out_addr))
+    io.stderr:write(string.format("[ERROR] Unable to find quark output transposer by address of %s.\n", config.transposer_quark_out_addr)))
     error = true
   else
-    io.write(string.format("[INFO] Loaded quark output transposer at address %s!\n", config.transposer_quark_out_addr))
+    io.write(string.format("[INFO] Loaded quark output transposer at address %s!\n", component.get(config.transposer_quark_out_addr)))
   end
   if component.get(config.transposer_fluid_out_addr) == nil then
-    io.stderr:write(string.format("[ERROR] Unable to find fluid output transposer by address of %s.\n", config.transposer_fluid_out_addr))
+    io.stderr:write(string.format("[ERROR] Unable to find fluid output transposer by address of %s.\n", config.transposer_fluid_out_addr)))
     error = true
   else
-    io.write(string.format("[INFO] Loaded fluid output transposer at address %s!\n", config.transposer_fluid_out_addr))
+    io.write(string.format("[INFO] Loaded fluid output transposer at address %s!\n", component.get(config.transposer_fluid_out_addr)))
   end
   if error then
     os.exit()
