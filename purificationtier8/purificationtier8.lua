@@ -1,26 +1,14 @@
 local fs = require("filesystem")
 local serial = require("serialization")
 local component = require("component")
-local redstone
-local transposer
+local redstone = component.redstone
+local transposer_quark_in
+local transposer_quark_out
+local transposer_fluid_out
 
 local version = 1
 local config_path = "/etc/purificationtier8.cfg"
 local default_config_path = "/etc/purificationtier8.cfg.d"
-
-if component.isAvailable("redstone") then
-  redstone = component.redstone
-else
-  io.stderr:write("A tier 2 redstone card is required.")
-  os.exit()
-end
-
-if component.isAvailable("transposer") then
-  transposer = component.transposer
-else
-  io.stderr:write("A transposer is required.")
-  os.exit()
-end
 
 function main(config)
   if version > config.version then
@@ -28,10 +16,20 @@ function main(config)
   elseif version < config.version then
     io.write(string.format("The program is using version %d, which is older than the config file's version, %d.\n", version, config.version))
   end
+  transposer_quark_in = component.proxy(config.transposer_quark_in_addr)
+  transposer_quark_out = component.proxy(config.transposer_quark_out_addr)
+  transposer_fluid_out = component.proxy(config.transposer_fluid_out_addr)
   local quark_sequence = {1,2,3,4,5,6, 1,3,5,2,6,4, 1,5,2,4,3,6}
-  local last_quark = 0
-  local second_to_last_quark = 0
-  local error = false
+  local quark_index = 1
+  local sane = true
+  while sane do
+    io.write(quark_sequence[quark_index])
+    quark_index = quark_index + 1
+    if quark_index == 18 then
+      sane = false
+    os.sleep(0.05)
+  end
+  io.write("[ERROR] Unknown error detected! Shutting down...")
 end
 
 function load_config()
