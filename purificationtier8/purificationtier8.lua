@@ -27,6 +27,7 @@ function main(config)
     quark_index = quark_index + 1
     if quark_index == 18 then
       sane = false
+    end
     os.sleep(0.05)
   end
   io.write("[ERROR] Unknown error detected! Shutting down...")
