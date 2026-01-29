@@ -16,25 +16,30 @@ function main(config)
   elseif version < config.version then
     io.write(string.format("[WARN] The program is using version %d, which is older than the config file's version, %d.\n", version, config.version))
   end
-  transposer_quark_in = component.proxy(component.get(config.transposer_quark_in_addr))
-  transposer_quark_out = component.proxy(component.get(config.transposer_quark_out_addr))
-  transposer_fluid_out = component.proxy(component.get(config.transposer_fluid_out_addr))
   error = false
-  if transposer_quark_in == nil then
+  if not component.isAvailable("redstone") then
+    io.stderr:write("[ERROR] Unable to find redstone card.")
+    error = true
+  end
+  if component.get(config.transposer_quark_in_addr) == nil then
     io.stderr:write(string.format("[ERROR] Unable to find quark input transposer by address of %s.", config.transposer_quark_in_addr))
     error = true
   end
-  if transposer_quark_out == nil then
+  if component.get(config.transposer_quark_out_addr) == nil then
     io.stderr:write(string.format("[ERROR] Unable to find quark output transposer by address of %s.", config.transposer_quark_out_addr))
     error = true
   end
-  if transposer_fluid_out == nil then
+  if component.get(config.transposer_fluid_out_addr) == nil then
     io.stderr:write(string.format("[ERROR] Unable to find fluid output transposer by address of %s.", config.transposer_fluid_out_addr))
     error = true
   end
   if error then
     os.exit()
   end
+  redstone = component.redstone
+  transposer_quark_in = component.proxy(component.get(config.transposer_quark_in_addr))
+  transposer_quark_out = component.proxy(component.get(config.transposer_quark_out_addr))
+  transposer_fluid_out = component.proxy(component.get(config.transposer_fluid_out_addr))
   local quark_sequence = {1,2,3,4,5,6, 1,3,5,2,6,4, 1,5,2,4,3,6}
   local quark_index = 1
   local sane = true
@@ -58,10 +63,10 @@ end
 
 io.write("[INFO] Searching for config file...\n")
 if fs.exists(config_path) then
-  io.write("Config found. Loading config... ")
+  io.write("[INFO] Config found. Loading config... ")
   load_config()
 else
-  io.write("No config exists, searching for default... ")
+  io.write("[INFO] No config exists, searching for default... ")
   if fs.exists(default_config_path) then
     io.write("Default config found.\n")
     if fs.copy(default_config_path,  config_path) then
