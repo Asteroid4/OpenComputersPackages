@@ -60,16 +60,12 @@ function main(config)
           if transposer_fluid_out.getTankLevel(config.fluid_in_side_on_fluid_out, 1) == 2000 then
             transposer_fluid_out.transferFluid(config.fluid_in_side_on_fluid_out, config.fluid_out_side_on_fluid_out, 2000)
             quark_pair_found = true
+            io.write(string.format("[INFO] Quark pair found to be quarks %s and %s!", quark_sequence[quark_index - 1], quark_sequence[quark_index - 2]))
             quarks_to_craft[quark_sequence[quark_index - 1]] = quarks_to_craft[quark_sequence[quark_index - 1]] + 1
             quarks_to_craft[quark_sequence[quark_index - 2]] = quarks_to_craft[quark_sequence[quark_index - 2]] + 1
-            io.write(quarks_to_craft[1])
-            io.write(quarks_to_craft[2])
-            io.write(quarks_to_craft[3])
-            io.write(quarks_to_craft[4])
-            io.write(quarks_to_craft[5])
-            io.write(quarks_to_craft[6])
           else
             transposer_quark_in.transferItem(config.chest_side_on_quark_in, config.input_side_on_quark_in, 1, quark_sequence[quark_index], 1)
+            io.write(string.format("[INFO] Inserted quark %s.", quark_sequence[quark_index]))
             if quark_index >= 18 then
               quark_index = 1
             else
@@ -77,6 +73,21 @@ function main(config)
             end
           end
         end
+      end
+    end
+    if transposer_quark_out.getSlotStackSize(config.chest_side_on_quark_out, 7) > 0 then
+      if quarks_to_craft[1] > 0 then
+        transposer_quark_in.transferItem(config.chest_side_on_quark_in, config.up_quark_realignment_side_on_quark_in, 1, 7, 1)
+      elseif quarks_to_craft[2] > 0 then
+        transposer_quark_in.transferItem(config.chest_side_on_quark_in, config.down_quark_realignment_side_on_quark_in, 1, 7, 1)
+      elseif quarks_to_craft[3] > 0 then
+        transposer_quark_in.transferItem(config.chest_side_on_quark_in, config.bottom_quark_realignment_side_on_quark_in, 1, 7, 1)
+      elseif quarks_to_craft[4] > 0 then
+        transposer_quark_out.transferItem(config.chest_side_on_quark_out, config.top_quark_realignment_side_on_quark_out, 1, 7, 1)
+      elseif quarks_to_craft[5] > 0 then
+        transposer_quark_out.transferItem(config.chest_side_on_quark_out, config.strange_quark_realignment_side_on_quark_out, 1, 7, 1)
+      elseif quarks_to_craft[6] > 0 then
+        transposer_quark_out.transferItem(config.chest_side_on_quark_out, config.charm_quark_realignment_side_on_quark_out, 1, 7, 1)
       end
     end
     os.sleep(0.05)
