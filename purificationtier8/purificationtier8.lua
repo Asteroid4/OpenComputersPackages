@@ -52,8 +52,15 @@ function main(config)
   local quarks_to_craft = {0,0,0,0,0,0}
   local quark_index = 1
   local quark_pair_found = false
+  local last_clock_restart_signal = 0
   local sane = true
   while sane do
+    if redstone.getInput(config.clock_restart_signal_computer_side) == 0 and last_clock_restart_signal ~= 0 then
+      io.write("[INFO] Restarting recipe...")
+      transposer_fluid_out.transferFluid(config.fluid_in_side_on_fluid_out, config.fluid_out_side_on_fluid_out, transposer_fluid_out.getTankLevel(config.fluid_in_side_on_fluid_out, 1))
+      quark_pair_found = false
+      quark_index = 1
+    end
     if redstone.getInput(config.machine_active_signal_computer_side) > 0 then
       if not quark_pair_found then
         if transposer_quark_in.getSlotStackSize(config.input_side_on_quark_in, 1) == 0 then
@@ -77,31 +84,32 @@ function main(config)
     end
     if transposer_quark_out.getSlotStackSize(config.chest_side_on_quark_out, 7) > 0 then
       if quarks_to_craft[1] > 0 then
+        io.write("[INFO] Realigning quark 1...\n")
         transposer_quark_in.transferItem(config.chest_side_on_quark_in, config.up_quark_realignment_side_on_quark_in, 1, 7, 1)
         quarks_to_craft[1] = quarks_to_craft[1] - 1
-        io.write("[INFO] Realigning quark 1...\n")
       elseif quarks_to_craft[2] > 0 then
+        io.write("[INFO] Realigning quark 2...\n")
         transposer_quark_in.transferItem(config.chest_side_on_quark_in, config.down_quark_realignment_side_on_quark_in, 1, 7, 1)
         quarks_to_craft[2] = quarks_to_craft[2] - 1
-        io.write("[INFO] Realigning quark 2...\n")
       elseif quarks_to_craft[3] > 0 then
+        io.write("[INFO] Realigning quark 3...\n")
         transposer_quark_in.transferItem(config.chest_side_on_quark_in, config.bottom_quark_realignment_side_on_quark_in, 1, 7, 1)
         quarks_to_craft[3] = quarks_to_craft[3] - 1
-        io.write("[INFO] Realigning quark 3...\n")
       elseif quarks_to_craft[4] > 0 then
+        io.write("[INFO] Realigning quark 4...\n")
         transposer_quark_out.transferItem(config.chest_side_on_quark_out, config.top_quark_realignment_side_on_quark_out, 1, 7, 1)
         quarks_to_craft[4] = quarks_to_craft[4] - 1
-        io.write("[INFO] Realigning quark 4...\n")
       elseif quarks_to_craft[5] > 0 then
+        io.write("[INFO] Realigning quark 5...\n")
         transposer_quark_out.transferItem(config.chest_side_on_quark_out, config.strange_quark_realignment_side_on_quark_out, 1, 7, 1)
         quarks_to_craft[5] = quarks_to_craft[5] - 1
-        io.write("[INFO] Realigning quark 5...\n")
       elseif quarks_to_craft[6] > 0 then
+        io.write("[INFO] Realigning quark 6...\n")
         transposer_quark_out.transferItem(config.chest_side_on_quark_out, config.charm_quark_realignment_side_on_quark_out, 1, 7, 1)
         quarks_to_craft[6] = quarks_to_craft[6] - 1
-        io.write("[INFO] Realigning quark 6...\n")
       end
     end
+    last_clock_restart_signal = redstone.getInput(config.clock_restart_signal_computer_side)
     os.sleep(0.05)
   end
   io.stderr:write("[ERROR] Unknown error detected! Shutting down...")
