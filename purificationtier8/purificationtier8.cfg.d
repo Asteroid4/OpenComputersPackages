@@ -19,6 +19,6 @@
   input_side_on_quark_in = 0,
   chest_side_on_quark_out = 3,
 
-  fluid_out_side_on_fluid_out = 1
+  fluid_out_side_on_fluid_out = 1,
   fluid_in_side_on_fluid_out = 0
 }
