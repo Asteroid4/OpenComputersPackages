@@ -58,6 +58,7 @@ function main(config)
     if redstone.getInput(config.clock_restart_signal_computer_side) == 0 and last_clock_restart_signal ~= 0 then
       io.write("[INFO] Restarting recipe...\n")
       transposer_fluid_out.transferFluid(config.fluid_in_side_on_fluid_out, config.fluid_out_side_on_fluid_out, transposer_fluid_out.getTankLevel(config.fluid_in_side_on_fluid_out, 1))
+      transposer_quark_in.transferItem(config.input_side_on_quark_in, config.chest_side_on_quark_in, 1, 1)
       quark_pair_found = false
       quark_index = 1
     end
