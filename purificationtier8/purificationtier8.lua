@@ -50,12 +50,12 @@ function main(config)
   transposer_fluid_out = component.proxy(component.get(config.transposer_fluid_out_addr))
   local quark_sequence = {1,2,3,4,5,6, 1,3,5,2,6,4, 1,5,2,4,3,6}
   local quark_index = 1
+  local quark_pair_found = false
   local sane = true
   while sane do
-    io.write(quark_sequence[quark_index])
-    quark_index = quark_index + 1
-    if quark_index == 18 then
-      sane = false
+    if redstone.getInput(config.machine_active_signal_computer_side) > 0 then
+      if not quark_pair_found then
+      end
     end
     os.sleep(0.05)
   end
