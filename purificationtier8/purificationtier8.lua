@@ -49,12 +49,29 @@ function main(config)
   transposer_quark_out = component.proxy(component.get(config.transposer_quark_out_addr))
   transposer_fluid_out = component.proxy(component.get(config.transposer_fluid_out_addr))
   local quark_sequence = {1,2,3,4,5,6, 1,3,5,2,6,4, 1,5,2,4,3,6}
+  local quarks_to_craft = {0,0,0,0,0,0}
   local quark_index = 1
   local quark_pair_found = false
   local sane = true
   while sane do
     if redstone.getInput(config.machine_active_signal_computer_side) > 0 then
       if not quark_pair_found then
+        if transposer_quark_in.getSlotStackSize(config.input_side_on_quark_in, 1) == 0 then
+          if transposer_fluid_out.getTankLevel(config.fluid_in_side_on_fluid_out, 1) == 2000 then
+            transposer_fluid_out.transferFluid(config.fluid_in_side_on_fluid_out, config.fluid_out_side_on_fluid_out, 2000)
+            quark_pair_found = true
+            quarks_to_craft[quark_sequence[quark_index]] = quarks_to_craft[quark_sequence[quark_index]] + 1
+            quarks_to_craft[quark_sequence[quark_index - 1]] = quarks_to_craft[quark_sequence[quark_index - 1]] + 1
+            io.write(quarks_to_craft)
+          else
+            transposer_quark_in.transferItem(config.chest_side_on_quark_in, config.input_side_on_quark_in, 1, quark_sequence[quark_index], 1)
+            if quark_index >= 18 then
+              quark_index = 0
+            else
+              quark_index = quark_index + 1
+            end
+          end
+        end
       end
     end
     os.sleep(0.05)
