@@ -60,8 +60,8 @@ function main(config)
           if transposer_fluid_out.getTankLevel(config.fluid_in_side_on_fluid_out, 1) == 2000 then
             transposer_fluid_out.transferFluid(config.fluid_in_side_on_fluid_out, config.fluid_out_side_on_fluid_out, 2000)
             quark_pair_found = true
-            quarks_to_craft[quark_sequence[quark_index]] = quarks_to_craft[quark_sequence[quark_index]] + 1
             quarks_to_craft[quark_sequence[quark_index - 1]] = quarks_to_craft[quark_sequence[quark_index - 1]] + 1
+            quarks_to_craft[quark_sequence[quark_index - 2]] = quarks_to_craft[quark_sequence[quark_index - 2]] + 1
             io.write(quarks_to_craft[1])
             io.write(quarks_to_craft[2])
             io.write(quarks_to_craft[3])
