@@ -82,24 +82,24 @@ function main(config)
         io.write("[INFO] Realigning quark 1...\n")
       elseif quarks_to_craft[2] > 0 then
         transposer_quark_in.transferItem(config.chest_side_on_quark_in, config.down_quark_realignment_side_on_quark_in, 1, 7, 1)
-        quarks_to_craft[1] = quarks_to_craft[1] - 1
+        quarks_to_craft[2] = quarks_to_craft[2] - 1
         io.write("[INFO] Realigning quark 2...\n")
       elseif quarks_to_craft[3] > 0 then
         transposer_quark_in.transferItem(config.chest_side_on_quark_in, config.bottom_quark_realignment_side_on_quark_in, 1, 7, 1)
-        quarks_to_craft[1] = quarks_to_craft[1] - 1
+        quarks_to_craft[3] = quarks_to_craft[3] - 1
         io.write("[INFO] Realigning quark 3...\n")
       elseif quarks_to_craft[4] > 0 then
         transposer_quark_out.transferItem(config.chest_side_on_quark_out, config.top_quark_realignment_side_on_quark_out, 1, 7, 1)
-        quarks_to_craft[1] = quarks_to_craft[1] - 1
+        quarks_to_craft[4] = quarks_to_craft[4] - 1
         io.write("[INFO] Realigning quark 4...\n")
       elseif quarks_to_craft[5] > 0 then
         transposer_quark_out.transferItem(config.chest_side_on_quark_out, config.strange_quark_realignment_side_on_quark_out, 1, 7, 1)
-        quarks_to_craft[1] = quarks_to_craft[1] - 1
+        quarks_to_craft[5] = quarks_to_craft[5] - 1
         io.write("[INFO] Realigning quark 5...\n")
       elseif quarks_to_craft[6] > 0 then
         transposer_quark_out.transferItem(config.chest_side_on_quark_out, config.charm_quark_realignment_side_on_quark_out, 1, 7, 1)
-        quarks_to_craft[1] = quarks_to_craft[1] - 1
-        io.write("[INFO] Realigning quark 16...\n")
+        quarks_to_craft[6] = quarks_to_craft[6] - 1
+        io.write("[INFO] Realigning quark 6...\n")
       end
     end
     os.sleep(0.05)
