@@ -66,7 +66,7 @@ function main(config)
           else
             transposer_quark_in.transferItem(config.chest_side_on_quark_in, config.input_side_on_quark_in, 1, quark_sequence[quark_index], 1)
             if quark_index >= 18 then
-              quark_index = 0
+              quark_index = 1
             else
               quark_index = quark_index + 1
             end
@@ -95,12 +95,12 @@ else
   if fs.exists(default_config_path) then
     io.write("Default config found.\n")
     if fs.copy(default_config_path,  config_path) then
-      io.write("[ERROR] Created config using default. Loading config... ")
+      io.write("[INFO] Created config using default. Loading config... ")
       load_config()
     else
       io.write("[ERROR] Copy failed. Exiting...\n")
     end
   else
-      io.write("\n[INFO] No default config found. Exiting...\n")
+      io.write("\n[ERROR] No default config found. Exiting...\n")
   end
 end
