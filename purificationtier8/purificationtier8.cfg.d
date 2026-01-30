@@ -15,5 +15,10 @@
   strange_quark_realignment_side_on_quark_out = 2,
   charm_quark_realignment_side_on_quark_out = 4,
 
-  fluid_output_side = 1
+  chest_side_on_quark_in = 4,
+  input_side_on_quark_in = 0,
+  chest_side_on_quark_out = 3,
+
+  fluid_out_side_on_fluid_out = 1
+  fluid_in_side_on_fluid_out = 0
 }
