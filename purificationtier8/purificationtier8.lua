@@ -62,7 +62,12 @@ function main(config)
             quark_pair_found = true
             quarks_to_craft[quark_sequence[quark_index]] = quarks_to_craft[quark_sequence[quark_index]] + 1
             quarks_to_craft[quark_sequence[quark_index - 1]] = quarks_to_craft[quark_sequence[quark_index - 1]] + 1
-            io.write(quarks_to_craft)
+            io.write(quarks_to_craft[1])
+            io.write(quarks_to_craft[2])
+            io.write(quarks_to_craft[3])
+            io.write(quarks_to_craft[4])
+            io.write(quarks_to_craft[5])
+            io.write(quarks_to_craft[6])
           else
             transposer_quark_in.transferItem(config.chest_side_on_quark_in, config.input_side_on_quark_in, 1, quark_sequence[quark_index], 1)
             if quark_index >= 18 then
