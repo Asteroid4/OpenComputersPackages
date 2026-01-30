@@ -74,11 +74,7 @@ function main(config)
           else
             transposer_quark_in.transferItem(config.chest_side_on_quark_in, config.input_side_on_quark_in, 1, quark_sequence[quark_index], 1)
             io.write(string.format("[INFO] Inserted quark %s.\n", quark_sequence[quark_index]))
-            if quark_index >= 18 then
-              quark_index = 1
-            else
-              quark_index = quark_index + 1
-            end
+            quark_index = quark_index + 1
           end
         end
       end
