@@ -95,7 +95,7 @@ else
   if fs.exists(default_config_path) then
     io.write("Default config found.\n")
     if fs.copy(default_config_path,  config_path) then
-      io.write("Created config using default. Loading config... ")
+      io.write("[ERROR] Created config using default. Loading config... ")
       load_config()
     else
       io.write("[ERROR] Copy failed. Exiting...\n")
