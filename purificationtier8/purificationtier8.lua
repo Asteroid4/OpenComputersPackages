@@ -6,7 +6,7 @@ local transposer_quark_in
 local transposer_quark_out
 local transposer_fluid_out
 
-local version = 1
+local version = 2
 local config_path = "/etc/purificationtier8.cfg"
 local default_config_path = "/etc/purificationtier8.cfg.d"
 
@@ -52,16 +52,8 @@ function main(config)
   local quarks_to_craft = {0,0,0,0,0,0}
   local quark_index = 1
   local quark_pair_found = false
-  local last_clock_restart_signal = redstone.getInput(config.clock_restart_signal_computer_side)
   local sane = true
   while sane do
-    if redstone.getInput(config.clock_restart_signal_computer_side) == 0 and last_clock_restart_signal ~= 0 then
-      io.write("[INFO] Restarting recipe...\n")
-      transposer_fluid_out.transferFluid(config.fluid_in_side_on_fluid_out, config.fluid_out_side_on_fluid_out, transposer_fluid_out.getTankLevel(config.fluid_in_side_on_fluid_out, 1))
-      transposer_quark_in.transferItem(config.input_side_on_quark_in, config.chest_side_on_quark_in, 1, 1)
-      quark_pair_found = false
-      quark_index = 1
-    end
     if redstone.getInput(config.machine_active_signal_computer_side) > 0 then
       if not quark_pair_found then
         if transposer_quark_in.getSlotStackSize(config.input_side_on_quark_in, 1) == 0 then
@@ -80,6 +72,13 @@ function main(config)
       end
     end
     if transposer_quark_out.getSlotStackSize(config.chest_side_on_quark_out, 7) > 0 then
+      if quark_pair_found then
+        io.write("[INFO] Restarting recipe...\n")
+        transposer_fluid_out.transferFluid(config.fluid_in_side_on_fluid_out, config.fluid_out_side_on_fluid_out, transposer_fluid_out.getTankLevel(config.fluid_in_side_on_fluid_out, 1))
+        transposer_quark_in.transferItem(config.input_side_on_quark_in, config.chest_side_on_quark_in, 1, 1)
+        quark_pair_found = false
+        quark_index = 1
+      end
       if quarks_to_craft[1] > 0 then
         io.write("[INFO] Realigning quark 1...\n")
         transposer_quark_in.transferItem(config.chest_side_on_quark_in, config.up_quark_realignment_side_on_quark_in, 1, 7, 1)
@@ -106,7 +105,6 @@ function main(config)
         quarks_to_craft[6] = quarks_to_craft[6] - 1
       end
     end
-    last_clock_restart_signal = redstone.getInput(config.clock_restart_signal_computer_side)
     os.sleep(0.05)
   end
   io.stderr:write("[ERROR] Unknown error detected! Shutting down...")
