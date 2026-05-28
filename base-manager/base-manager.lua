@@ -42,7 +42,7 @@ function main(config)
     os.exit()
   end
   io.write("[INFO] Starting monitor...\n")
-  os.sleep(10)
+  os.sleep(5)
   local sane = true
   local gpu = component.gpu
   gpu.setBackground(0x000000)
