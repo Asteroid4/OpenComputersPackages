@@ -44,7 +44,7 @@ function main(config)
   io.write("[INFO] Starting monitor...\n")
   os.sleep(10)
   local sane = true
-  local gpu = term.gpu()
+  local gpu = component.gpu
   gpu.setBackground(0x000000)
   local width, height = gpu.getResolution()
   gpu.fill(1,1,width,height," ")
