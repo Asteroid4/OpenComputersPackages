@@ -2,6 +2,7 @@ local fs = require("filesystem")
 local serial = require("serialization")
 local component = require("component")
 local term = require("term")
+local redstone
 
 local version = 1
 local config_path = "/etc/base-manager.cfg"
@@ -12,6 +13,13 @@ function main(config)
     io.write(string.format("[WARN] The program is using version %d, which is newer than the config file's version, %d.\n", version, config.version))
   elseif version < config.version then
     io.write(string.format("[WARN] The program is using version %d, which is older than the config file's version, %d.\n", version, config.version))
+  end
+  if not component.isAvailable("redstone") then
+    io.stderr:write("[ERROR] Unable to find redstone card.\n")
+    os.exit()
+  else
+    io.write("[INFO] Found redstone card!\n")
+    redstone = component.redstone
   end
   components = {}
   for addr, salted_name in pairs(config.monitored_components) do
