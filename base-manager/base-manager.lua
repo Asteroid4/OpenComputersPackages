@@ -1,6 +1,7 @@
 local fs = require("filesystem")
 local serial = require("serialization")
 local component = require("component")
+local term = require("term")
 
 local version = 1
 local config_path = "/etc/base-manager.cfg"
