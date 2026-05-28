@@ -20,10 +20,33 @@ function main(config)
   else
     io.write("[INFO] Found redstone card!\n")
   end
+  components = {}
+  for addr, salted_name in pairs(config.monitored_components) do
+    local component = component.proxy(component.get(addr))
+    component["base_manager_name"] = string.sub(salted_name, 1, -2)
+    local postfix = string.sub(salted_name, -1, -1)
+    if postfix == "!" then
+      component["is_critical"] = true
+      table.insert(components, component)
+    else
+      if postfix == "." then
+        component["is_critical"] = false
+        table.insert(components, component)
+      end
+    end
+  end
   if error then
     os.exit()
   end
-  redstone = component.redstone
+  local sane = true
+  while sane do
+    for component in components do
+      io.write(component.base_manager_name)
+      io.write(component.is_critical)
+      io.write("")
+    end
+    sane = false
+  end
   io.stderr:write("[ERROR] Unknown error detected! Shutting down...")
 end
 
