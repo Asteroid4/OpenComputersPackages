@@ -35,8 +35,12 @@ function main(config)
       end
     end
   end
-  io.write("[INFO] Starting monitor...")
-  os.sleep(15)
+  if (#components == 0) then
+    io.write("[ERROR] No components available to monitor! Exiting...")
+    os.exit()
+  end
+  io.write("[INFO] Starting monitor...\n")
+  os.sleep(10)
   local sane = true
   while sane do
     for _, component in pairs(components) do
