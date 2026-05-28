@@ -46,10 +46,10 @@ function main(config)
   os.sleep(5)
   local sane = true
   local gpu = component.gpu
-  gpu.setBackground(0x000000)
   local width, height = gpu.getResolution()
   gpu.fill(1,1,width,height," ")
   local critical_component_offline = false
+  table.sort(components)
   while sane do
     critical_component_offline = false
     for index, component in pairs(components) do
