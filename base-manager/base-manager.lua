@@ -35,6 +35,8 @@ function main(config)
       end
     end
   end
+  io.write("[INFO] Starting monitor...")
+  os.sleep(15)
   local sane = true
   while sane do
     for _, component in pairs(components) do
