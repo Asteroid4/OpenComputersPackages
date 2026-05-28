@@ -49,7 +49,9 @@ function main(config)
   local width, height = gpu.getResolution()
   gpu.fill(1,1,width,height," ")
   local critical_component_offline = false
-  table.sort(components)
+  table.sort(components, function (a,b)
+      return (a["base_manager_name"] > b["base_manager_name"])
+  end)
   while sane do
     critical_component_offline = false
     for index, component in pairs(components) do
