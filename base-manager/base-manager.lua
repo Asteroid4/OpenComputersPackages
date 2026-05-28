@@ -66,8 +66,11 @@ function main(config)
           status = "ONLINE "
           statusColor = 0x00FF00
         else
-          status = "OFFLINE "
+          status = "OFFLINE"
           statusColor = 0xFF0000
+          if component["is_critical"] then
+            critical_component_offline = true
+          end
         end
       end
       gpu.setForeground(statusColor)
