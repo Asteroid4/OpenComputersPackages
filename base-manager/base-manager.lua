@@ -67,6 +67,8 @@ function main(config)
         else
           status = "OFFLINE "
           statusColor = 0xFF0000
+        end
+      end
       gpu.setForeground(statusColor)
       term.write(status)
       gpu.setForeground(0xFFFFFF)
