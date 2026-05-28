@@ -13,30 +13,27 @@ function main(config)
   elseif version < config.version then
     io.write(string.format("[WARN] The program is using version %d, which is older than the config file's version, %d.\n", version, config.version))
   end
-  error = false
-  if not component.isAvailable("redstone") then
-    io.stderr:write("[ERROR] Unable to find redstone card.\n")
-    error = true
-  else
-    io.write("[INFO] Found redstone card!\n")
-  end
   components = {}
   for addr, salted_name in pairs(config.monitored_components) do
-    local component = component.proxy(component.get(addr))
-    component["base_manager_name"] = string.sub(salted_name, 1, -2)
-    local postfix = string.sub(salted_name, -1, -1)
-    if postfix == "!" then
-      component["is_critical"] = true
-      table.insert(components, component)
+    local address = component.get(address)
+    if type(address) ~= "string" then
+      io.write(string.format("[WARN] Invalid component address recieved, %s does not represent a valid component. Skipping...", addr))
     else
-      if postfix == "." then
-        component["is_critical"] = false
+      local component = component.proxy(address)
+      component["base_manager_name"] = string.sub(salted_name, 1, -2)
+      local postfix = string.sub(salted_name, -1, -1)
+      if postfix == "!" then
+        component["is_critical"] = true
         table.insert(components, component)
+      else
+        if postfix == "." then
+          component["is_critical"] = false
+          table.insert(components, component)
+        else
+          io.write(string.format("[WARN] Component \"%s\" (%s) does not end in either \'!\' or \'.\', skipping...", string.sub(salted_name, 1, -2), address))
+        end
       end
     end
-  end
-  if error then
-    os.exit()
   end
   local sane = true
   while sane do
