@@ -17,20 +17,23 @@ function main(config)
   for addr, salted_name in pairs(config.monitored_components) do
     local address = component.get(addr)
     if type(address) ~= "string" then
-      io.write(string.format("[WARN] Invalid component address recieved, %s does not represent a valid component. Skipping...\n", addr))
+      io.write(string.format("[WARN] Invalid component address recieved, the address \"%s\" does not represent a valid component. Skipping...\n", addr))
     else
       local component = component.proxy(address)
-      component["base_manager_name"] = string.sub(salted_name, 1, -2)
+      local component_name = string.sub(salted_name, 1, -2)
+      component["base_manager_name"] = component_name
       local postfix = string.sub(salted_name, -1, -1)
       if postfix == "!" then
         component["is_critical"] = true
         table.insert(components, component)
+        io.write(string.format("[INFO] Added critical component \"%s\" (%s)", component_name, address))
       else
         if postfix == "." then
           component["is_critical"] = false
           table.insert(components, component)
+          io.write(string.format("[INFO] Added noncritical component \"%s\" (%s)", component_name, address))
         else
-          io.write(string.format("[WARN] Component \"%s\" (%s) does not end in either \'!\' or \'.\', skipping...\n", string.sub(salted_name, 1, -2), address))
+          io.write(string.format("[WARN] Component \"%s\" (%s) does not end in either \'!\' or \'.\', skipping...\n", component_name, address))
         end
       end
     end
