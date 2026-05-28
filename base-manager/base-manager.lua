@@ -15,7 +15,7 @@ function main(config)
     io.write(string.format("[WARN] The program is using version %d, which is older than the config file's version, %d.\n", version, config.version))
   end
   if not component.isAvailable("redstone") then
-    io.stderr:write("[ERROR] Unable to find redstone card.\n")
+    io.stderr:write("[ERROR] Unable to find redstone card. Exiting...\n")
     os.exit()
   else
     io.write("[INFO] Found redstone card!\n")
