@@ -86,9 +86,11 @@ function main(config)
       gpu.setForeground(statusColor)
       term.write(status)
       gpu.setForeground(0xFFFFFF)
+      redstone.setOutput(config.alarm_output_side, critical_component_offline and 15 or 0)
     end
     term.setCursor(1,1)
   end
+  redstone.setOutput(config.alarm_output_side, 0)
   io.stderr:write("[ERROR] Unknown error detected! Shutting down...")
 end
 
