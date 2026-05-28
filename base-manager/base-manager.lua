@@ -15,9 +15,9 @@ function main(config)
   end
   components = {}
   for addr, salted_name in pairs(config.monitored_components) do
-    local address = component.get(address)
+    local address = component.get(addr)
     if type(address) ~= "string" then
-      io.write(string.format("[WARN] Invalid component address recieved, %s does not represent a valid component. Skipping...", addr))
+      io.write(string.format("[WARN] Invalid component address recieved, %s does not represent a valid component. Skipping...\n", addr))
     else
       local component = component.proxy(address)
       component["base_manager_name"] = string.sub(salted_name, 1, -2)
@@ -30,7 +30,7 @@ function main(config)
           component["is_critical"] = false
           table.insert(components, component)
         else
-          io.write(string.format("[WARN] Component \"%s\" (%s) does not end in either \'!\' or \'.\', skipping...", string.sub(salted_name, 1, -2), address))
+          io.write(string.format("[WARN] Component \"%s\" (%s) does not end in either \'!\' or \'.\', skipping...\n", string.sub(salted_name, 1, -2), address))
         end
       end
     end
