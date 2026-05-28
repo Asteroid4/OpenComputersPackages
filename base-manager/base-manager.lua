@@ -25,12 +25,12 @@ function main(config)
       if postfix == "!" then
         component["is_critical"] = true
         table.insert(components, component)
-        io.write(string.format("[INFO] Added critical component \"%s\" (%s)", component_name, address))
+        io.write(string.format("[INFO] Added critical component \"%s\" (%s)\n", component_name, address))
       else
         if postfix == "." then
           component["is_critical"] = false
           table.insert(components, component)
-          io.write(string.format("[INFO] Added noncritical component \"%s\" (%s)", component_name, address))
+          io.write(string.format("[INFO] Added noncritical component \"%s\" (%s)\n", component_name, address))
         else
           io.write(string.format("[WARN] Component \"%s\" (%s) does not end in either \'!\' or \'.\', skipping...\n", component_name, address))
         end
@@ -38,7 +38,7 @@ function main(config)
     end
   end
   if (#components == 0) then
-    io.write("[ERROR] No components available to monitor! Exiting...")
+    io.write("[ERROR] No components available to monitor! Exiting...\n")
     os.exit()
   end
   io.write("[INFO] Starting monitor...\n")
