@@ -51,7 +51,12 @@ function main(config)
   while sane do
     for index, component in pairs(components) do
       term.setCursor(2, 1 + index)
-      term.write(string.format("%s\tONLINE", component["base_manager_name"]))
+      local status = "ONLINE"
+      local statusColor = 0x00FF00
+      term.write(string.format("%s\t", component["base_manager_name"]))
+      gpu.setForeground(statusColor)
+      term.write(status)
+      gpu.setForeground(0xFFFFFF)
     end
     term.setCursor(1,1)
   end
