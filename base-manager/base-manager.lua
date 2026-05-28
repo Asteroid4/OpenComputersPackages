@@ -48,12 +48,25 @@ function main(config)
   gpu.setBackground(0x000000)
   local width, height = gpu.getResolution()
   gpu.fill(1,1,width,height," ")
+  local critical_component_offline = false
   while sane do
+    critical_component_offline = false
     for index, component in pairs(components) do
-      term.setCursor(2, 1 + index)
-      local status = "ONLINE"
-      local statusColor = 0x00FF00
+      term.setCursor(3, 1 + index)
+      local status = "nil"
+      local statusColor = 0xFFFFFF
       term.write(string.format("%s\t", component["base_manager_name"]))
+      local f = component.isMachineActive
+      if f == nil then
+        status = "UNKNOWN"
+        statusColor = 0xFFFF00
+      else
+        if f() then
+          status = "ONLINE "
+          statusColor = 0x00FF00
+        else
+          status = "OFFLINE "
+          statusColor = 0xFF0000
       gpu.setForeground(statusColor)
       term.write(status)
       gpu.setForeground(0xFFFFFF)
