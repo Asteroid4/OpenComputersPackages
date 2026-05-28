@@ -1,7 +1,6 @@
 local fs = require("filesystem")
 local serial = require("serialization")
 local component = require("component")
-local redstone
 
 local version = 1
 local config_path = "/etc/base-manager.cfg"
@@ -45,13 +44,16 @@ function main(config)
   io.write("[INFO] Starting monitor...\n")
   os.sleep(10)
   local sane = true
+  local gpu = term.gpu()
+  gpu.setBackground(0x000000)
+  local width, height = gpu.getResolution()
+  gpu.fill(1,1,width,height," ")
   while sane do
-    for _, component in pairs(components) do
-      io.write(component.base_manager_name)
-      io.write(component.is_critical)
-      io.write("")
+    for index, component in pairs(components) do
+      term.setCursor(2, 1 + index)
+      term.write(string.format("%s\tONLINE", component["base_manager_name"]))
     end
-    sane = false
+    term.setCursor(1,1)
   end
   io.stderr:write("[ERROR] Unknown error detected! Shutting down...")
 end
