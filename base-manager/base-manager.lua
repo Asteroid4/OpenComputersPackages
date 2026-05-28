@@ -37,7 +37,7 @@ function main(config)
   end
   local sane = true
   while sane do
-    for component in components do
+    for _, component in pairs(components) do
       io.write(component.base_manager_name)
       io.write(component.is_critical)
       io.write("")
