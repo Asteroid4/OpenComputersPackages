@@ -1,7 +1,7 @@
 {
   version = 1,
 
-  alarm_output_side = 2
+  alarm_output_side = 2,
 
   monitored_components = {
     ["noncritical-component-address"] = "Name of this component.",
