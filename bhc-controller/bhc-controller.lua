@@ -3,6 +3,7 @@ local serial = require("serialization")
 local component = require("component")
 local redstone
 local transposer
+local bhc
 
 local version = 1
 local config_path = "/etc/bhc-controller.cfg"
@@ -28,18 +29,39 @@ function main(config)
     io.write("[INFO] Found transposer!\n")
     transposer = component.transposer
   end
+  if not component.isAvailable("gt_machine") then
+    io.stderr:write("[ERROR] Unable to find BHC controller. Exiting...\n")
+    os.exit()
+  else
+    io.write("[INFO] Found BHC controller!\n")
+    bhc = component.gt_machine
+  end
   local sane = true
   local internal_black_hole_active = false
   local timer = 0
   while sane do
-    if redstone.getInput(config.black_hole_active_side) > 0 then
+    if redstone.getInput(config.black_hole_active_side) == 0 then
       if redstone.getInput(config.recipes_ready_side) > 0 and not internal_black_hole_active then
         transposer.transferItem(config.black_hole_seed_side_on_transposer, config.input_side_on_transposer, 1, 1, 1)
-        redstone.setOutput(config.recipes_active_side, 15)
+        redstone.setOutput(config.recipes_inputs_side, 15)
         internal_black_hole_active = true
         timer = 2000
       end
     else
+      if redstone.getOutput(config.spacetime_inputs_side) == 0 then
+        timer = timer - 1
+      end
+      if timer < 200 then
+        redstone.setOutput(config.recipes_inputs_side, 0)
+        if bhc.getWorkMaxProgress() - bhc.getWorkProgress() > timer - 100 then
+          redstone.setOutput(config.spacetime_inputs_side, 15)
+        end
+        if bhc.getWorkMaxProgress() == 0 then
+          transposer.transferItem(config.black_hole__side_on_transposer, config.input_side_on_transposer, 1, 1, 1)
+          internal_black_hole_active = false
+          redstone.setOutput(config.spacetime_inputs_side, 0)
+        end
+      end
     end
     os.sleep(0.05)
   end
