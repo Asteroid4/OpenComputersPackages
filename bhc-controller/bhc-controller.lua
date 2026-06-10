@@ -29,8 +29,18 @@ function main(config)
     transposer = component.transposer
   end
   local sane = true
+  local internal_black_hole_active = false
+  local timer = 0
   while sane do
-    if 
+    if redstone.getInput(config.black_hole_active_side) > 0 then
+      if redstone.getInput(config.recipes_ready_side) > 0 and not internal_black_hole_active then
+        transposer.transferItem(config.black_hole_seed_side_on_transposer, config.input_side_on_transposer, 1, 1, 1)
+        redstone.setOutput(config.recipes_active_side, 15)
+        internal_black_hole_active = true
+        timer = 2000
+      end
+    else
+    end
     os.sleep(0.05)
   end
   io.stderr:write("[ERROR] Unknown error detected! Shutting down...")
