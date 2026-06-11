@@ -42,24 +42,30 @@ function main(config)
   while sane do
     if redstone.getInput(config.black_hole_active_side_input) == 0 then
       if redstone.getInput(config.recipes_ready_side_input) > 0 and not internal_black_hole_active then
-        transposer.transferItem(config.black_hole_seed_side_on_transposer, config.input_side_on_transposer, 1, 1, 1)
+        transposer.transferItem(config.black_hole_seed_side_on_transposer, config.input_side_on_transposer, 1, 2, 1)
         redstone.setOutput(config.recipes_inputs_side_output, 15)
         internal_black_hole_active = true
         timer = 2000
+        io.write("[INFO] Black Hole opening...")
       end
     else
       if redstone.getOutput(config.spacetime_inputs_side_output) == 0 then
         timer = timer - 1
+        if timer % 100 == 0 then
+          io.write(string.format("[INFO] Black Hole time remaining: %d seconds.", timer // 20))
+        end
       end
       if timer < 200 then
         redstone.setOutput(config.recipes_inputs_side_output, 0)
         if bhc.getWorkMaxProgress() - bhc.getWorkProgress() > timer - 100 then
           redstone.setOutput(config.spacetime_inputs_side_output, 15)
+          io.write("[INFO] Inputting Spacetime to halt decay...")
         end
         if bhc.getWorkMaxProgress() == 0 then
-          transposer.transferItem(config.black_hole_collapser_side_on_transposer, config.input_side_on_transposer, 1, 1, 1)
+          transposer.transferItem(config.black_hole_collapser_side_on_transposer, config.input_side_on_transposer, 1, 2, 1)
           internal_black_hole_active = false
           redstone.setOutput(config.spacetime_inputs_side_output, 0)
+          io.write("[INFO] Black Hole closing...")
         end
       end
     end
