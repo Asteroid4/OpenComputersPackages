@@ -54,9 +54,9 @@ function main(config)
       if redstone.getOutput(config.spacetime_inputs_side_output) > 0 then
         black_hole_opened_time = black_hole_opened_time + computer.uptime() - last_recorded_time
       end
-      if computer.uptime() - black_hole_opened_time < 10 then
+      if computer.uptime() - black_hole_opened_time > 90 then
         redstone.setOutput(config.recipes_inputs_side_output, 0)
-        if bhc.getWorkMaxProgress() - bhc.getWorkProgress() > computer.uptime() - black_hole_opened_time - 5 then
+        if bhc.getWorkMaxProgress() - bhc.getWorkProgress() > (computer.uptime() - black_hole_opened_time - 5) * 20 then
           redstone.setOutput(config.spacetime_inputs_side_output, 15)
           io.write("[INFO] Inputting Spacetime to halt decay...\n")
         end
