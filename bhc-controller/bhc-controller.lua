@@ -1,6 +1,7 @@
 local fs = require("filesystem")
 local serial = require("serialization")
 local component = require("component")
+local computer = require("computer")
 local redstone
 local transposer
 local bhc
