@@ -38,26 +38,24 @@ function main(config)
   end
   local sane = true
   local internal_black_hole_active = false
-  local timer = 0
+  local black_hole_opened_time = 0
+  local last_recorded_time = 0
   while sane do
     if redstone.getInput(config.black_hole_active_side_input) == 0 then
       if redstone.getInput(config.recipes_ready_side_input) > 0 and not internal_black_hole_active then
         transposer.transferItem(config.black_hole_seed_side_on_transposer, config.input_side_on_transposer, 1, 2, 1)
         redstone.setOutput(config.recipes_inputs_side_output, 15)
         internal_black_hole_active = true
-        timer = 2000
+        black_hole_opened_time = computer.uptime()
         io.write("[INFO] Black Hole opening...\n")
       end
     else
-      if redstone.getOutput(config.spacetime_inputs_side_output) == 0 then
-        timer = timer - 1
-        if timer % 100 == 0 then
-          io.write(string.format("[INFO] Black Hole time remaining: %d seconds.\n", timer // 20))
-        end
+      if redstone.getOutput(config.spacetime_inputs_side_output) > 0 then
+        black_hole_opened_time = black_hole_opened_time + computer.uptime() - last_recorded_time
       end
-      if timer < 200 then
+      if computer.uptime() - black_hole_opened_time < 10 then
         redstone.setOutput(config.recipes_inputs_side_output, 0)
-        if bhc.getWorkMaxProgress() - bhc.getWorkProgress() > timer - 100 then
+        if bhc.getWorkMaxProgress() - bhc.getWorkProgress() > computer.uptime() - black_hole_opened_time - 5 then
           redstone.setOutput(config.spacetime_inputs_side_output, 15)
           io.write("[INFO] Inputting Spacetime to halt decay...\n")
         end
@@ -69,7 +67,8 @@ function main(config)
         end
       end
     end
-    os.sleep(0.05)
+    last_recorded_time = computer.uptime()
+    os.sleep(1)
   end
   io.stderr:write("[ERROR] Unknown error detected! Shutting down...")
 end
