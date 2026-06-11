@@ -61,7 +61,7 @@ function main(config)
           redstone.setOutput(config.spacetime_inputs_side_output, 15)
           io.write("[INFO] Inputting Spacetime to halt decay...\n")
         end
-        if bhc.getWorkMaxProgress() == 0 then
+        if bhc.getWorkMaxProgress() == 0 and internal_black_hole_active then
           transposer.transferItem(config.black_hole_collapser_side_on_transposer, config.input_side_on_transposer, 1, 2, 1)
           internal_black_hole_active = false
           redstone.setOutput(config.spacetime_inputs_side_output, 0)
