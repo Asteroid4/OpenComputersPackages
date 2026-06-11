@@ -43,28 +43,28 @@ function main(config)
   local last_recorded_time = 0
   while sane do
     if redstone.getInput(config.black_hole_active_side_input) == 0 then
+      redstone.setOutput(config.spacetime_inputs_side_output, 0)
       if redstone.getInput(config.recipes_ready_side_input) > 0 and not internal_black_hole_active then
         transposer.transferItem(config.black_hole_seed_side_on_transposer, config.input_side_on_transposer, 1, 2, 1)
         redstone.setOutput(config.recipes_inputs_side_output, 15)
         internal_black_hole_active = true
         black_hole_opened_time = computer.uptime()
-        io.write("[INFO] Black Hole opening...\n")
+        io.write("[INFO] Black Hole opened.\n")
       end
     else
       if redstone.getOutput(config.spacetime_inputs_side_output) > 0 then
         black_hole_opened_time = black_hole_opened_time + computer.uptime() - last_recorded_time
       end
       if computer.uptime() - black_hole_opened_time > 90 then
-        redstone.setOutput(config.recipes_inputs_side_output, 0)
+        if internal_black_hole_active then
+          transposer.transferItem(config.black_hole_collapser_side_on_transposer, config.input_side_on_transposer, 1, 2, 1)
+          internal_black_hole_active = false
+          io.write("[INFO] Black Hole closing...\n")
+          redstone.setOutput(config.recipes_inputs_side_output, 0)
+        end
         if bhc.getWorkMaxProgress() - bhc.getWorkProgress() > (computer.uptime() - black_hole_opened_time - 5) * 20 then
           redstone.setOutput(config.spacetime_inputs_side_output, 15)
           io.write("[INFO] Inputting Spacetime to halt decay...\n")
-        end
-        if bhc.getWorkMaxProgress() == 0 and internal_black_hole_active then
-          transposer.transferItem(config.black_hole_collapser_side_on_transposer, config.input_side_on_transposer, 1, 2, 1)
-          internal_black_hole_active = false
-          redstone.setOutput(config.spacetime_inputs_side_output, 0)
-          io.write("[INFO] Black Hole closing...\n")
         end
       end
     end
