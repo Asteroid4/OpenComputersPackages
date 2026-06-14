@@ -71,12 +71,6 @@ function main(config)
         end
       end
     end
-    io.write(spacetime_uptime)
-    io.write(" then ")
-    io.write(black_hole_uptime)
-    io.write(" and ")
-    io.write(config.min_spacetime_time)
-    io.write("\n")
     last_recorded_time = computer.uptime()
     os.sleep(1)
   end
