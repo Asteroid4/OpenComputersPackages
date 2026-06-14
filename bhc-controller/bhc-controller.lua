@@ -59,13 +59,13 @@ function main(config)
       else
         black_hole_uptime = black_hole_uptime + computer.uptime() - last_recorded_time
       end
-      if black_hole_uptime > 90 then
+      if black_hole_uptime >= 90 then
         io.write("[INFO] Inserting Spacetime to halt decay...\n")
         redstone.setOutput(config.spacetime_inputs_side_output, 15)
-        if spacetime_uptime > config.min_spacetime_time or redstone.getInput(config.recipes_ready_side_input) == 0 then
+        if spacetime_uptime >= config.min_spacetime_time or redstone.getInput(config.recipes_ready_side_input) == 0 then
           if not closing then
             io.write("[INFO] Black Hole closing...\n")
-            transposer.transferItem(config.black_hole_seed_side_on_transposer, config.input_side_on_transposer, 1, 2, 1)
+            transposer.transferItem(config.black_hole_collapser_side_on_transposer, config.input_side_on_transposer, 1, 2, 1)
             closing = true
           end
         end
