@@ -42,6 +42,8 @@ function main(config)
       end
       redstone.setOutput(config.spacetime_inputs_side_output, 0)
       closing = false
+      black_hole_uptime = 0
+      spacetime_uptime = 0
       if redstone.getInput(config.recipes_ready_side_input) > 0 and not activating then
         io.write("[INFO] Black Hole opening...\n")
         transposer.transferItem(config.black_hole_seed_side_on_transposer, config.input_side_on_transposer, 1, 2, 1)
