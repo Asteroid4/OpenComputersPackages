@@ -38,7 +38,7 @@ function main(config)
   while sane do
     if redstone.getInput(config.black_hole_active_side_input) == 0 then
       if closing then
-        io.write("[INFO] Black Hole closed.")
+        io.write("[INFO] Black Hole closed.\n")
       end
       redstone.setOutput(config.spacetime_inputs_side_output, 0)
       closing = false
@@ -51,7 +51,7 @@ function main(config)
       end
     else
       if activating then
-        io.write("[INFO] Black Hole opened.")
+        io.write("[INFO] Black Hole opened.\n")
       end
       activating = false
       if redstone.getOutput(config.spacetime_inputs_side_output) > 0 then
@@ -60,11 +60,11 @@ function main(config)
         black_hole_uptime = black_hole_uptime + last_recorded_time - computer.uptime()
       end
       if black_hole_uptime > 90 then
-        io.write("[INFO] Inserting Spacetime to halt decay...")
+        io.write("[INFO] Inserting Spacetime to halt decay...\n")
         redstone.setOutput(config.spacetime_inputs_side_output, 15)
         if spacetime_uptime > config.min_spacetime_time or redstone.getInput(config.recipes_ready_side_input) == 0 then
           if not closing then
-            io.write("[INFO] Black Hole closing...")
+            io.write("[INFO] Black Hole closing...\n")
             transposer.transferItem(config.black_hole_seed_side_on_transposer, config.input_side_on_transposer, 1, 2, 1)
             closing = true
           end
@@ -72,7 +72,9 @@ function main(config)
       end
     end
     io.write(spacetime_uptime)
+    io.write(" then ")
     io.write(black_hole_uptime)
+    io.write("\n")
     last_recorded_time = computer.uptime()
     os.sleep(1)
   end
