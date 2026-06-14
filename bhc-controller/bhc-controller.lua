@@ -35,23 +35,27 @@ function main(config)
   local black_hole_uptime = 0
   local spacetime_uptime = 0
   local last_recorded_time = 0
+  local last_message_time = computer.uptime()
   while sane do
     if redstone.getInput(config.black_hole_active_side_input) == 0 then
       if closing then
-        io.write("[INFO] Black Hole closed.\n")
+        io.write(string.format("[INFO] Black Hole closed; disabled spacetime input. (%fs)\n", computer.uptime() - last_message_time))
+        last_message_time = computer.uptime()
       end
       redstone.setOutput(config.spacetime_inputs_side_output, 0)
       closing = false
       black_hole_uptime = 0
       spacetime_uptime = 0
       if redstone.getInput(config.recipes_ready_side_input) > 0 and not activating then
-        io.write("[INFO] Black Hole opening...\n")
+        io.write(string.format("[INFO] Black Hole opening...\n", computer.uptime() - last_message_time))
+        last_message_time = computer.uptime()
         transposer.transferItem(config.black_hole_seed_side_on_transposer, config.input_side_on_transposer, 1, 2, 1)
         activating = true
       end
     else
       if activating then
-        io.write("[INFO] Black Hole opened.\n")
+        io.write(string.format("[INFO] Black Hole opened.\n", computer.uptime() - last_message_time))
+        last_message_time = computer.uptime()
       end
       activating = false
       if redstone.getOutput(config.spacetime_inputs_side_output) > 0 then
@@ -61,12 +65,14 @@ function main(config)
       end
       if black_hole_uptime >= 90 then
         if redstone.getOutput(config.spacetime_inputs_side_output) == 0 then
-          io.write("[INFO] Inserting Spacetime to halt decay...\n")
+          io.write(string.format("[INFO] Inserting Spacetime to halt decay...\n", computer.uptime() - last_message_time))
+          last_message_time = computer.uptime()
         end
         redstone.setOutput(config.spacetime_inputs_side_output, 15)
         if spacetime_uptime >= config.min_spacetime_time or redstone.getInput(config.recipes_ready_side_input) == 0 then
           if not closing then
-            io.write("[INFO] Black Hole closing...\n")
+            io.write(string.format("[INFO] Black Hole closing...\n", computer.uptime() - last_message_time))
+            last_message_time = computer.uptime()
             transposer.transferItem(config.black_hole_collapser_side_on_transposer, config.input_side_on_transposer, 1, 2, 1)
             closing = true
           end
