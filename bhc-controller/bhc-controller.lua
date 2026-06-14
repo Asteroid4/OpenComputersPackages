@@ -4,9 +4,8 @@ local component = require("component")
 local computer = require("computer")
 local redstone
 local transposer
-local bhc
 
-local version = 1
+local version = 2
 local config_path = "/etc/bhc-controller.cfg"
 local default_config_path = "/etc/bhc-controller.cfg.d"
 
@@ -30,41 +29,42 @@ function main(config)
     io.write("[INFO] Found transposer!\n")
     transposer = component.transposer
   end
-  if not component.isAvailable("gt_machine") then
-    io.stderr:write("[ERROR] Unable to find BHC controller. Exiting...\n")
-    os.exit()
-  else
-    io.write("[INFO] Found BHC controller!\n")
-    bhc = component.gt_machine
-  end
   local sane = true
-  local internal_black_hole_active = false
-  local black_hole_opened_time = 0
+  local activating = false
+  local closing = false
+  local black_hole_uptime = 0
+  local spacetime_uptime = 0
   local last_recorded_time = 0
   while sane do
     if redstone.getInput(config.black_hole_active_side_input) == 0 then
+      if closing then
+        io.write("[INFO] Black Hole closed.")
+      end
       redstone.setOutput(config.spacetime_inputs_side_output, 0)
-      if redstone.getInput(config.recipes_ready_side_input) > 0 and not internal_black_hole_active then
+      closing = false
+      if redstone.getInput(config.recipes_ready_side_input) > 0 and not activating then
+        io.write("[INFO] Black Hole opening...\n")
         transposer.transferItem(config.black_hole_seed_side_on_transposer, config.input_side_on_transposer, 1, 2, 1)
-        redstone.setOutput(config.recipes_inputs_side_output, 15)
-        internal_black_hole_active = true
-        black_hole_opened_time = computer.uptime()
-        io.write("[INFO] Black Hole opened.\n")
+        activating = true
       end
     else
-      if redstone.getOutput(config.spacetime_inputs_side_output) > 0 then
-        black_hole_opened_time = black_hole_opened_time + computer.uptime() - last_recorded_time
+      if activating then
+        io.write("[INFO] Black Hole opened.")
       end
-      if computer.uptime() - black_hole_opened_time > 90 then
-        if internal_black_hole_active then
-          transposer.transferItem(config.black_hole_collapser_side_on_transposer, config.input_side_on_transposer, 1, 2, 1)
-          internal_black_hole_active = false
-          io.write("[INFO] Black Hole closing...\n")
-          redstone.setOutput(config.recipes_inputs_side_output, 0)
-        end
-        if bhc.getWorkMaxProgress() - bhc.getWorkProgress() > (computer.uptime() - black_hole_opened_time - 5) * 20 then
-          redstone.setOutput(config.spacetime_inputs_side_output, 15)
-          io.write("[INFO] Inputting Spacetime to halt decay...\n")
+      activating = false
+      if redstone.getOutput(config.spacetime_inputs_side_output) > 0 then
+        spacetime_uptime = spacetime_uptime + last_recorded_time - computer.uptime()
+      else
+        black_hole_uptime = black_hole_uptime + last_recorded_time - computer.uptime()
+      end
+      if black_hole_uptime > 90 then
+        redstone.setOutput(config.spacetime_inputs_side_output, 15)
+        if spacetime_uptime > config.min_spacetime_time or redstone.getInput(config.recipes_ready_side_input) == 0 then
+          if not closing then
+            io.write("[INFO] Black Hole closing...")
+            transposer.transferItem(config.black_hole_seed_side_on_transposer, config.input_side_on_transposer, 1, 2, 1)
+            closing = true
+          end
         end
       end
     end
