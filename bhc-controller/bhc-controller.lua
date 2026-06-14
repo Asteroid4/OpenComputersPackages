@@ -60,7 +60,9 @@ function main(config)
         black_hole_uptime = black_hole_uptime + computer.uptime() - last_recorded_time
       end
       if black_hole_uptime >= 90 then
-        io.write("[INFO] Inserting Spacetime to halt decay...\n")
+        if redstone.getOutput(config.spacetime_inputs_side_output) == 0 then
+          io.write("[INFO] Inserting Spacetime to halt decay...\n")
+        end
         redstone.setOutput(config.spacetime_inputs_side_output, 15)
         if spacetime_uptime >= config.min_spacetime_time or redstone.getInput(config.recipes_ready_side_input) == 0 then
           if not closing then
