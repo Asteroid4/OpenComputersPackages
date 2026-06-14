@@ -55,9 +55,9 @@ function main(config)
       end
       activating = false
       if redstone.getOutput(config.spacetime_inputs_side_output) > 0 then
-        spacetime_uptime = spacetime_uptime + last_recorded_time - computer.uptime()
+        spacetime_uptime = spacetime_uptime + computer.uptime() - last_recorded_time
       else
-        black_hole_uptime = black_hole_uptime + last_recorded_time - computer.uptime()
+        black_hole_uptime = black_hole_uptime + computer.uptime() - last_recorded_time
       end
       if black_hole_uptime > 90 then
         io.write("[INFO] Inserting Spacetime to halt decay...\n")
@@ -74,6 +74,8 @@ function main(config)
     io.write(spacetime_uptime)
     io.write(" then ")
     io.write(black_hole_uptime)
+    io.write(" and ")
+    io.write(config.min_spacetime_time)
     io.write("\n")
     last_recorded_time = computer.uptime()
     os.sleep(1)
